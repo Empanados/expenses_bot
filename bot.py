@@ -1,7 +1,7 @@
 import telebot
 from telebot import types
 
-token = ''
+token = '5517891048:AAGnSivfbJhaKG9LalH1T4BGqZtfYC9lF3k'
 bot = telebot.TeleBot(token)
 
 expenses_list = []
@@ -39,12 +39,12 @@ def start_message(message):
 
 
 
-@bot.message_handler(content_types='text')
+@bot.message_handler(content_types=['text'])
 def message_reply(message):
     global expenses_list
     user_id = message.from_user.id
     if is_number(message.text):
-        bot.register_next_step_handler(message, select_category(message))
+        bot.register_next_step_handler(message, select_category)
     else:
         bot.send_message(message.chat.id,"Попробуй еще раз, пёс")
 
@@ -74,7 +74,8 @@ def adding_expense(call):
             bot.send_message(call.message.chat.id,"Вы пока ничего не занесли", reply_markup=markup)
         elif sum(user_list(user_id, expenses_list)) > 0:
             for expense in user_list(user_id, expenses_list):
-                bot.send_message(call.message.chat.id, f"{expense}", reply_markup=markup)
+                bot.send_message(call.message.chat.id, f"{expense}")
+            bot.send_message(call.message.chat.id, 'Внесите новый расход', reply_markup=markup)
     elif call.data == "Очистить список":
         expenses_list = []
         bot.send_message(call.message.chat.id,"Список очищен", reply_markup=markup)
@@ -84,7 +85,6 @@ def adding_expense(call):
         category = data[1]
         expenses_list.append([user_id, text])
         bot.send_message(call.message.chat.id, f"Добавлен расход {text} рублей в категорию {category}", reply_markup=markup)
-    
-    bot.register_next_step_handler(message_reply(msg))
+
 
 bot.infinity_polling()
