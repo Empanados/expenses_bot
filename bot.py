@@ -5,7 +5,7 @@ token = '5517891048:AAGnSivfbJhaKG9LalH1T4BGqZtfYC9lF3k'
 bot = telebot.TeleBot(token)
 
 expenses_list = []
-categories = {"Обырвалг", "Алкоголь", "Бубалех"}
+categories = {"Обырвалг", "Алкоголь", "Сладкий Бубалех"}
 
 def is_number(str):
     try:
@@ -88,10 +88,10 @@ def adding_expense(call):
     elif call.data == "Очистить список":
         expenses_list = []
         bot.send_message(call.message.chat.id,"Список очищен", reply_markup=markup)
-    elif call.data.split()[1] in categories:
+    elif ' '.join(call.data.split()[1:]) in categories:
         data = call.data.split()
         text = abs(float(data[0]))
-        category = data[1]
+        category = ' '.join(data[1:])
         expenses_list.append([user_id, text, category])
         bot.send_message(call.message.chat.id, f"Добавлен расход {text} рублей в категорию {category}", reply_markup=markup)
     elif call.data == "Показать мой id":
