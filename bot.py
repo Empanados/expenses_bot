@@ -74,7 +74,7 @@ def adding_expense(call):
             bot.send_message(call.message.chat.id,"Вы пока ничего не занесли", reply_markup=markup)
         elif sum(user_list(user_id, expenses_list)) > 0:
             for expense in user_list(user_id, expenses_list):
-                bot.send_message(call.message.chat.id, f"{expense}", reply_markup=keyboard)
+                bot.send_message(call.message.chat.id, f"{expense}", reply_markup=markup)
     elif call.data == "Очистить список":
         expenses_list = []
         bot.send_message(call.message.chat.id,"Список очищен", reply_markup=markup)
