@@ -1,11 +1,11 @@
 import telebot
 from telebot import types
 
-token = ''
+token = '5517891048:AAGnSivfbJhaKG9LalH1T4BGqZtfYC9lF3k'
 bot = telebot.TeleBot(token)
 
 expenses_list = []
-categories = {"Еда", "Алкоголь", "Транспорт"}
+categories = {"Обырвалг", "Алкоголь", "Бубалех"}
 
 def is_number(str):
     try:
@@ -32,8 +32,9 @@ def usual_keyboard():
     item1 = types.InlineKeyboardButton(text="Баланс", callback_data="Баланс")
     item2 = types.InlineKeyboardButton(text="Список расходов", callback_data="Список расходов")
     item3 = types.InlineKeyboardButton(text="Очистить список", callback_data="Очистить список")
+    item4 = types.InlineKeyboardButton(text="Показать мой id", callback_data="Показать мой id")
     markup.row(item1, item2)
-    markup.row(item3)
+    markup.row(item3, item4)
     return markup
    
             
@@ -93,6 +94,8 @@ def adding_expense(call):
         category = data[1]
         expenses_list.append([user_id, text, category])
         bot.send_message(call.message.chat.id, f"Добавлен расход {text} рублей в категорию {category}", reply_markup=markup)
-
+    elif call.data == "Показать мой id":
+        user_id = call.from_user.id
+        bot.send_message(call.message.chat.id,f"{user_id}", reply_markup=markup)
 
 bot.infinity_polling()
