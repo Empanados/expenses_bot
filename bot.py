@@ -44,7 +44,7 @@ def message_reply(message):
     global expenses_list
     user_id = message.from_user.id
     if is_number(message.text):
-        bot.register_next_step_handler(message, select_category)
+        select_category(message)
     else:
         bot.send_message(message.chat.id,"Попробуй еще раз, пёс")
 
@@ -68,14 +68,14 @@ def adding_expense(call):
         if sum(user_list(user_id, expenses_list)) == 0:
             bot.send_message(call.message.chat.id,"Вы пока ничего не занесли", reply_markup=markup)
         elif sum(user_list(user_id, expenses_list)) > 0:
-            bot.send_message(call.message.chat.id, f"Ваши расходы: {sum(user_list(user_id, expenses_list))} рублей", reply_markup=markup)
+            bot.send_message(call.message.chat.id, f"Ваши расходы: {sum(user_list(user_id, expenses_list))}", reply_markup=markup)
     elif call.data == "Список расходов":
         if sum(user_list(user_id, expenses_list)) == 0:
             bot.send_message(call.message.chat.id,"Вы пока ничего не занесли", reply_markup=markup)
         elif sum(user_list(user_id, expenses_list)) > 0:
             for expense in user_list(user_id, expenses_list):
                 bot.send_message(call.message.chat.id, f"{expense}")
-            bot.send_message(call.message.chat.id, 'Внесите новый расход', reply_markup=markup)
+            bot.send_message(call.message.chat.id, f"Ваши расходы: {sum(user_list(user_id, expenses_list))}", reply_markup=markup)
     elif call.data == "Очистить список":
         expenses_list = []
         bot.send_message(call.message.chat.id,"Список очищен", reply_markup=markup)
