@@ -32,9 +32,9 @@ def usual_keyboard():
     item1 = types.InlineKeyboardButton(text="Баланс", callback_data="Баланс")
     item2 = types.InlineKeyboardButton(text="Список расходов", callback_data="Список расходов")
     item3 = types.InlineKeyboardButton(text="Очистить список", callback_data="Очистить список")
-    item4 = types.InlineKeyboardButton(text="Показать мой id", callback_data="Показать мой id")
+    # item4 = types.InlineKeyboardButton(text="Показать мой id", callback_data="Показать мой id")
     markup.row(item1, item2)
-    markup.row(item3, item4)
+    markup.row(item3)
     return markup
    
             
@@ -69,7 +69,7 @@ def select_category(message):
 @bot.callback_query_handler(func=lambda call: True)
 def adding_expense(call):
     global expenses_list
-    user_id = call.message.from_user.id
+    user_id = call.from_user.id
     markup = usual_keyboard()
     with_category_list = user_list(user_id, expenses_list)
     summa = sum(user_list_without_category(with_category_list))
@@ -94,8 +94,8 @@ def adding_expense(call):
         category = ' '.join(data[1:])
         expenses_list.append([user_id, text, category])
         bot.send_message(call.message.chat.id, f"Добавлен расход {text} рублей в категорию {category}", reply_markup=markup)
-    elif call.data == "Показать мой id":
-        user_id = call.from_user.id
-        bot.send_message(call.message.chat.id,f"{user_id}", reply_markup=markup)
+    # elif call.data == "Показать мой id":
+    #     user_id = call.from_user.id
+    #     bot.send_message(call.message.chat.id,f"{user_id}", reply_markup=markup)
 
 bot.infinity_polling()
