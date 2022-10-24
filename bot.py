@@ -1,7 +1,7 @@
 import telebot
 from telebot import types
 
-token = ''
+token = '5517891048:AAGnSivfbJhaKG9LalH1T4BGqZtfYC9lF3k'
 bot = telebot.TeleBot(token)
 
 expenses_list = []
