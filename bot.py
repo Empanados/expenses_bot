@@ -1,7 +1,7 @@
-import telebot
+import telebot, db
 from telebot import types
 
-token = '5517891048:AAGnSivfbJhaKG9LalH1T4BGqZtfYC9lF3k'
+token = ''
 bot = telebot.TeleBot(token)
 
 expenses_list = []
