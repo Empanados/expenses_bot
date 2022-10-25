@@ -18,6 +18,7 @@ def creating_database ():
         id INTEGER PRIMARY KEY,
         user_id INTEGER NOT NULL,
         category_id INTEGER NOT NULL,
+        expense INTEGER NOT NULL,
         date TEXT NOT NULL,
         FOREIGN KEY(user_id) REFERENCES users(id),
         FOREIGN KEY(category_id) REFERENCES categories(id)
@@ -59,7 +60,11 @@ def default_filling():
                   (2, "Алкоголь"),
                   (3, "Сладкий Бубалех"),
                   (4, "Бугульма")]
+    expenses = [(1, 1, 1, 100, '01.01.2022'),
+                (2, 1, 1, 200, '02.01.2022')]
     cur.executemany('INSERT OR IGNORE INTO categories VALUES(?, ?);', categories)
+    # cur.execute('''INSERT OR IGNORE INTO users VALUES(?, ?);''', [1, 'Арнольд'])
+    # cur.executemany('INSERT OR IGNORE INTO expenses VALUES(?, ?, ?, ?, ?);', expenses)
     con.commit()
     con.close()
 
@@ -74,8 +79,23 @@ def drop_table():
     con.commit()
     con.close()
 
-# drop_table()
+def balance(user_id):
+    con = sqlite3.connect('db.sqlite')
+    cur = con.cursor()
+    cur.execute('''
+        SELECT users.name, SUM(expenses.expense)
+        FROM users
+        JOIN expenses ON users.id = expenses.user_id
+        GROUP BY users.id
+        HAVING users.id = ?;
+        ''', user_id)
+    for result in cur:
+        print(result[1])
+    con.close()
+
+
+drop_table()
 creating_database()
 # show_database()
 default_filling()
-# selecting()
+balance('1')

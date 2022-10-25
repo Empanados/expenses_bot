@@ -71,7 +71,8 @@ def adding_expense(call):
     user_id = call.from_user.id
     markup = usual_keyboard()
     with_category_list = user_list(user_id, expenses_list)
-    summa = sum(user_list_without_category(with_category_list))
+    # summa = sum(user_list_without_category(with_category_list))
+    summa = db.balance(user_id)
     if call.data == "Баланс":
         if summa == 0:
             bot.send_message(call.message.chat.id,"Вы пока ничего не занесли", reply_markup=markup)
