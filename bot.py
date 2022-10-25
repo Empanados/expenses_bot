@@ -1,12 +1,11 @@
-import telebot, db
+import telebot, db, creds
 from telebot import types
 
-token = ''
+token = creds.token
 bot = telebot.TeleBot(token)
 
 expenses_list = []
-categories = {"Обырвалг", "Алкоголь", "Сладкий Бубалех", "Бугульма"}
-
+categories = db.selecting_categories()
 def is_number(str):
     try:
         float(str)

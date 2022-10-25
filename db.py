@@ -37,16 +37,21 @@ def show_database():
         print(result)
     con.close()
 
-def selecting():
+def selecting_categories():
     con = sqlite3.connect('db.sqlite')
     cur = con.cursor()
     cur.execute('''
     SELECT *
     FROM categories;
     ''')
+    categories = set()
     for result in cur:
-        print(result)
+        categories.add(result[1])
     con.close()
+    return categories
+
+
+
 def default_filling():
     con = sqlite3.connect('db.sqlite')
     cur = con.cursor()
