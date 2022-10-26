@@ -25,7 +25,6 @@ def usual_keyboard():
     item1 = types.InlineKeyboardButton(text="Баланс", callback_data="Баланс")
     item2 = types.InlineKeyboardButton(text="Список расходов", callback_data="Список расходов")
     item3 = types.InlineKeyboardButton(text="Очистить список", callback_data="Очистить список")
-    # item4 = types.InlineKeyboardButton(text="Показать мой id", callback_data="Показать мой id")
     markup.row(item1, item2)
     markup.row(item3)
     return markup
@@ -86,11 +85,7 @@ def adding_expense(call):
         data = call.data.split()
         text = abs(float(data[0]))
         category = ' '.join(data[1:])
-        # expenses_list.append([user_id, text, category])
         db.new_expese(text, category, user_id)
         bot.send_message(call.message.chat.id, f"Добавлен расход {text} рублей в категорию {category}", reply_markup=markup)
-    # elif call.data == "Показать мой id":
-    #     user_id = call.from_user.id
-    #     bot.send_message(call.message.chat.id,f"{user_id}", reply_markup=markup)
 
 bot.infinity_polling()
