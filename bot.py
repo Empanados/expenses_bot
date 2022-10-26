@@ -13,12 +13,6 @@ def is_number(str):
     except ValueError:
         return False
 
-def user_list(user_id, expenses_list):
-    middle_list = []
-    for i in range(0, len(expenses_list)):
-        if expenses_list[i][0] == user_id:
-            middle_list.append([expenses_list[i][1], expenses_list[i][2]])
-    return middle_list
 
 def user_list_without_category(expenses_list):
     list = []
@@ -72,8 +66,6 @@ def adding_expense(call):
     global expenses_list
     user_id = call.from_user.id
     markup = usual_keyboard()
-    with_category_list = user_list(user_id, expenses_list)
-    # summa = sum(user_list_without_category(with_category_list))
     summa = db.balance(user_id) #Получение баланса из БД
     if call.data == "Баланс":
         if summa == 0:
@@ -84,7 +76,7 @@ def adding_expense(call):
         if summa == 0:
             bot.send_message(call.message.chat.id,"Вы пока ничего не занесли", reply_markup=markup)
         elif summa > 0:
-            for expense in user_list(user_id, expenses_list):
+            for expense in db.user_expenses_list(user_id):
                 bot.send_message(call.message.chat.id, f"{expense[0]} в категории {expense[1]}" )
             bot.send_message(call.message.chat.id, f"Ваши расходы: {summa}", reply_markup=markup)
     elif call.data == "Очистить список":
