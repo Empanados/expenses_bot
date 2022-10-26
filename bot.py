@@ -44,14 +44,12 @@ def start_message(message):
 @bot.message_handler(content_types=['text'])
 def message_reply(message):
     global expenses_list
-    user_id = message.from_user.id
     if is_number(message.text):
         select_category(message)
     else:
         bot.send_message(message.chat.id,"Попробуй еще раз, пёс")
 
 def select_category(message):
-    user_id = message.from_user.id
     keyboard = types.InlineKeyboardMarkup() #наша клавиатура
     value = abs(float(message.text))
     for category in categories:
@@ -65,6 +63,8 @@ def select_category(message):
 def adding_expense(call):
     global expenses_list
     user_id = call.from_user.id
+    username = call.message.from_user.username
+    db.save_new_user(user_id, username)
     markup = usual_keyboard()
     summa = db.balance(user_id) #Получение баланса из БД
     if call.data == "Баланс":
