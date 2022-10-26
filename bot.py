@@ -94,7 +94,8 @@ def adding_expense(call):
         data = call.data.split()
         text = abs(float(data[0]))
         category = ' '.join(data[1:])
-        expenses_list.append([user_id, text, category])
+        # expenses_list.append([user_id, text, category])
+        db.new_expese(text, category, user_id)
         bot.send_message(call.message.chat.id, f"Добавлен расход {text} рублей в категорию {category}", reply_markup=markup)
     # elif call.data == "Показать мой id":
     #     user_id = call.from_user.id

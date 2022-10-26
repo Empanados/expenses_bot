@@ -1,4 +1,5 @@
 import sqlite3
+import datetime
 
 def creating_database ():
     con = sqlite3.connect('db.sqlite')
@@ -60,11 +61,11 @@ def default_filling():
                   (2, "Алкоголь"),
                   (3, "Сладкий Бубалех"),
                   (4, "Бугульма")]
-    expenses = [(1, 1, 1, 100, '01.01.2022'),
-                (2, 1, 1, 200, '02.01.2022')]
+    expenses = [(357655661, 1, 100, '01.01.2022'),
+                (357655661, 1, 200, '02.01.2022')]
     cur.executemany('INSERT OR IGNORE INTO categories VALUES(?, ?);', categories)
-    # cur.execute('''INSERT OR IGNORE INTO users VALUES(?, ?);''', [1, 'Арнольд'])
-    # cur.executemany('INSERT OR IGNORE INTO expenses VALUES(?, ?, ?, ?, ?);', expenses)
+    cur.execute('''INSERT OR IGNORE INTO users VALUES(?, ?);''', [357655661, 'Empanadosito'])
+    # cur.executemany('INSERT OR IGNORE INTO expenses (user_id, category_id, expense, date) VALUES(?, ?, ?, ?);', expenses)
     con.commit()
     con.close()
 
@@ -83,14 +84,14 @@ def balance(user_id):
     con = sqlite3.connect('db.sqlite')
     cur = con.cursor()
     cur.execute('''
-        SELECT users.name, SUM(expenses.expense)
+        SELECT SUM(expenses.expense)
         FROM users
         JOIN expenses ON users.id = expenses.user_id
         GROUP BY users.id
         HAVING users.id = ?;
-        ''', user_id)
+        ''', (user_id, ))
     for result in cur:
-        print(result[1])
+        return result[0]
     con.close()
 
 def save_new_user(id, name):
@@ -100,10 +101,27 @@ def save_new_user(id, name):
     con.commit()
     con.close()
 
+def new_expese(value, category, user_id):
+    con = sqlite3.connect('db.sqlite')
+    cur = con.cursor()
+    cur.execute('''
+        SELECT *
+        FROM categories;
+        ''')
+    categories = set()
+    for result in cur:
+        categories.add(result)
+    for i in categories:
+        if i[1] == category:
+            category_id = i[0]
+    current_date = str(datetime.datetime.now())
+    cur.execute('''INSERT OR IGNORE INTO expenses (user_id, category_id, expense, date) 
+        VALUES(?, ?, ?, ?);''', [user_id, category_id, value, current_date])
+    con.commit()
+    con.close()
 
-
-drop_table()
+# drop_table()
 creating_database()
 # show_database()
 default_filling()
-# balance('1')
+balance('357655661')
