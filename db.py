@@ -93,9 +93,17 @@ def balance(user_id):
         print(result[1])
     con.close()
 
+def save_new_user(id, name):
+    con = sqlite3.connect('db.sqlite')
+    cur = con.cursor()
+    cur.execute('''INSERT OR IGNORE INTO users VALUES(?, ?);''', [id, name])
+    con.commit()
+    con.close()
+
+
 
 drop_table()
 creating_database()
 # show_database()
 default_filling()
-balance('1')
+# balance('1')

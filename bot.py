@@ -40,6 +40,8 @@ def usual_keyboard():
 @bot.message_handler(commands=['start'])
 def start_message(message):
     user_id = message.from_user.id
+    username = message.from_user.username
+    db.save_new_user(user_id, username)
     markup = usual_keyboard()
     bot.send_message(message.chat.id,'Добро пожаловать в бот учета расходов', reply_markup=markup)
 
@@ -72,7 +74,7 @@ def adding_expense(call):
     markup = usual_keyboard()
     with_category_list = user_list(user_id, expenses_list)
     # summa = sum(user_list_without_category(with_category_list))
-    summa = db.balance(user_id)
+    summa = db.balance(user_id) #Получение баланса из БД
     if call.data == "Баланс":
         if summa == 0:
             bot.send_message(call.message.chat.id,"Вы пока ничего не занесли", reply_markup=markup)
