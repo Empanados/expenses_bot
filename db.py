@@ -65,7 +65,7 @@ def default_filling():
                 (357655661, 1, 200, '02.01.2022')]
     cur.executemany('INSERT OR IGNORE INTO categories VALUES(?, ?);', categories)
     cur.execute('''INSERT OR IGNORE INTO users VALUES(?, ?);''', [357655661, 'Empanadosito'])
-    # cur.executemany('INSERT OR IGNORE INTO expenses (user_id, category_id, expense, date) VALUES(?, ?, ?, ?);', expenses)
+    cur.executemany('INSERT OR IGNORE INTO expenses (user_id, category_id, expense, date) VALUES(?, ?, ?, ?);', expenses)
     con.commit()
     con.close()
 
@@ -115,8 +115,20 @@ def new_expese(value, category, user_id):
         if i[1] == category:
             category_id = i[0]
     current_date = str(datetime.datetime.now())
-    cur.execute('''INSERT OR IGNORE INTO expenses (user_id, category_id, expense, date) 
-        VALUES(?, ?, ?, ?);''', [user_id, category_id, value, current_date])
+    print(user_id, category_id, value, current_date)
+    cur.executemany('''INSERT OR IGNORE INTO expenses (user_id, category_id, expense, date) 
+        VALUES(?, ?, ?, ?);''', [(user_id, category_id, value, current_date)])
+    con.commit()
+    con.close()
+
+
+def clear_expenses(user_id):
+    con = sqlite3.connect('db.sqlite')
+    cur = con.cursor()
+    cur.execute('''
+            DELETE FROM expenses
+            WHERE user_id = ?;
+            ''', [user_id])
     con.commit()
     con.close()
 
@@ -124,4 +136,6 @@ def new_expese(value, category, user_id):
 creating_database()
 # show_database()
 default_filling()
-balance('357655661')
+# print(balance('357655661'))
+# clear_expenses('357655661')
+# print(balance('357655661'))

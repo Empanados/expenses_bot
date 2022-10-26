@@ -88,7 +88,7 @@ def adding_expense(call):
                 bot.send_message(call.message.chat.id, f"{expense[0]} в категории {expense[1]}" )
             bot.send_message(call.message.chat.id, f"Ваши расходы: {summa}", reply_markup=markup)
     elif call.data == "Очистить список":
-        expenses_list = []
+        db.clear_expenses(user_id)
         bot.send_message(call.message.chat.id,"Список очищен", reply_markup=markup)
     elif ' '.join(call.data.split()[1:]) in categories:
         data = call.data.split()
